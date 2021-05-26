@@ -1,4 +1,5 @@
 // Lib
+import { useAuth0 } from '@auth0/auth0-react';
 import { Menu, Transition } from '@headlessui/react';
 import { BellIcon, MenuAlt2Icon } from '@heroicons/react/outline';
 import React, { Fragment, MouseEventHandler } from 'react';
@@ -39,6 +40,12 @@ export const AppBar: React.FC<AppBarProps> = ({ onClick }) => {
 };
 
 const ProfileDropdown: React.FC = () => {
+  const {
+    isAuthenticated,
+    loginWithRedirect,
+    logout,
+  } = useAuth0();
+
   return (
     <Menu as="div" className="ml-3 relative">
       {({ open }) => (
@@ -70,8 +77,8 @@ const ProfileDropdown: React.FC = () => {
               static
             >
               <UserMenuItem
-                href="#"
-                name="Sign in"
+                name={`Sign ${isAuthenticated ? 'out' : 'in'}`}
+                onClick={() => isAuthenticated ? logout() : loginWithRedirect()}
               />
             </Menu.Items>
           </Transition>
@@ -82,23 +89,23 @@ const ProfileDropdown: React.FC = () => {
 };
 
 interface UserMenuItemProps {
-  href: string;
   name: string;
+  onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
-const UserMenuItem: React.FC<UserMenuItemProps> = ({ href, name }) => {
+const UserMenuItem: React.FC<UserMenuItemProps> = ({ name, onClick }) => {
   return (
     <Menu.Item key={name}>
       {({ active }) => (
-        <a
+        <button
           className={classNames(
             active ? 'bg-gray-100' : '',
-            'block px-4 py-2 text-sm text-gray-700'
+            'block px-4 py-2 w-full text-sm text-left text-gray-700'
           )}
-          href={href}
+          onClick={onClick}
         >
           {name}
-        </a>
+        </button>
       )}
     </Menu.Item>
   );
