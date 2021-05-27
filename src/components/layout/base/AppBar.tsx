@@ -46,6 +46,18 @@ const ProfileDropdown: React.FC = () => {
     logout,
   } = useAuth0();
 
+  const handleAuthButtonClick: MouseEventHandler<HTMLButtonElement> = async () => {
+    if (isAuthenticated) {
+      logout({
+        client_id: process.env.REACT_APP_AUTH0_CLIENTID,
+        returnTo: window.location.origin,
+      });
+      return;
+    }
+
+    await loginWithRedirect();
+  };
+
   return (
     <Menu as="div" className="ml-3 relative">
       {({ open }) => (
@@ -78,7 +90,7 @@ const ProfileDropdown: React.FC = () => {
             >
               <UserMenuItem
                 name={`Sign ${isAuthenticated ? 'out' : 'in'}`}
-                onClick={() => isAuthenticated ? logout() : loginWithRedirect()}
+                onClick={handleAuthButtonClick}
               />
             </Menu.Items>
           </Transition>
