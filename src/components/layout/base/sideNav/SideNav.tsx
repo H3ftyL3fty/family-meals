@@ -19,7 +19,7 @@ export const SideNav: React.FC = () => {
           <div className="flex-1 flex flex-col overflow-y-auto">
             <nav className="flex-1 px-2 py-4 bg-gray-800 space-y-1">
               {NAV_ITEMS.map(navItemProps => (
-                <NavItem key={navItemProps.name} {...navItemProps} />
+                <NavItem key={navItemProps.to} {...navItemProps} />
               ))}
             </nav>
           </div>

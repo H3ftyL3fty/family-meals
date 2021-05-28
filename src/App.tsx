@@ -1,22 +1,50 @@
 // Lib
+import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Redirect,
+  Route,
+} from 'react-router-dom';
 // App
-import { BaseLayout } from './components';
+import { ProtectedRoute } from './components';
+import {
+  AuthPage,
+  IngredientsPage,
+  PlannerPage,
+  RecipesPage,
+} from './pages';
 
 const App: React.FC = () => {
+  const { isAuthenticated, isLoading } = useAuth0();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <BaseLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <h1 className="text-2xl font-semibold text-gray-900">Planner</h1>
-      </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        {/* Replace with your content */}
-        <div className="py-4">
-          <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" />
-        </div>
-        {/* /End replace */}
-      </div>
-    </BaseLayout>
+    <Router>
+        <Switch>
+          <ProtectedRoute path="/planner">
+            <PlannerPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/recipes">
+            <RecipesPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/ingredients">
+            <IngredientsPage />
+          </ProtectedRoute>
+          <Route path="*">
+            {isAuthenticated
+              ?
+                <Redirect to="/planner" />
+              :
+                <AuthPage />
+            }
+          </Route>
+        </Switch>
+    </Router>
   );
 };
 

@@ -40,22 +40,13 @@ export const AppBar: React.FC<AppBarProps> = ({ onClick }) => {
 };
 
 const ProfileDropdown: React.FC = () => {
-  const {
-    isAuthenticated,
-    loginWithRedirect,
-    logout,
-  } = useAuth0();
+  const { logout } = useAuth0();
 
-  const handleAuthButtonClick: MouseEventHandler<HTMLButtonElement> = async () => {
-    if (isAuthenticated) {
-      logout({
+  const handleLogoutButtonClick: MouseEventHandler<HTMLButtonElement> = async () => {
+    logout({
         client_id: process.env.REACT_APP_AUTH0_CLIENTID,
         returnTo: window.location.origin,
-      });
-      return;
-    }
-
-    await loginWithRedirect();
+    });
   };
 
   return (
@@ -89,8 +80,8 @@ const ProfileDropdown: React.FC = () => {
               static
             >
               <UserMenuItem
-                name={`Sign ${isAuthenticated ? 'out' : 'in'}`}
-                onClick={handleAuthButtonClick}
+                name="Sign out"
+                onClick={handleLogoutButtonClick}
               />
             </Menu.Items>
           </Transition>

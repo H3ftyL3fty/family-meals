@@ -13,21 +13,18 @@ export { SideNav } from './SideNav';
 
 export const NAV_ITEMS: NavItemProps[] = [
   {
-    current: true,
-    href: '#',
     icon: CalendarIcon,
-    name: 'Planner',
+    label: 'Planner',
+    to: '/planner',
   },
   {
-    current: false,
-    href: '#',
     icon: CollectionIcon,
-    name: 'Recipes',
+    label: 'Recipes',
+    to: '/recipes',
   },
   {
-    current: false,
-    href: '#',
     icon: ClipboardListIcon,
-    name: 'Ingredients',
+    label: 'Ingredients',
+    to: '/ingredients',
   },
 ];
