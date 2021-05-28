@@ -3,20 +3,21 @@ import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Redirect,
   Switch,
+  Redirect,
   Route,
 } from 'react-router-dom';
 // App
-import { BaseLayout } from './components';
+import { ProtectedRoute } from './components';
 import {
+  AuthPage,
   IngredientsPage,
   PlannerPage,
   RecipesPage,
 } from './pages';
 
 const App: React.FC = () => {
-  const { isLoading } = useAuth0();
+  const { isAuthenticated, isLoading } = useAuth0();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -24,22 +25,25 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <BaseLayout>
         <Switch>
-          <Route path="/planner">
+          <ProtectedRoute path="/planner">
             <PlannerPage />
-          </Route>
-          <Route path="/recipes">
+          </ProtectedRoute>
+          <ProtectedRoute path="/recipes">
             <RecipesPage />
-          </Route>
-          <Route path="/ingredients">
+          </ProtectedRoute>
+          <ProtectedRoute path="/ingredients">
             <IngredientsPage />
-          </Route>
+          </ProtectedRoute>
           <Route path="*">
-            <Redirect to="/planner" />
+            {isAuthenticated
+              ?
+                <Redirect to="/planner" />
+              :
+                <AuthPage />
+            }
           </Route>
         </Switch>
-      </BaseLayout>
     </Router>
   );
 };
