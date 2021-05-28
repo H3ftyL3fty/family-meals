@@ -1,35 +1,42 @@
 // Lib
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 // App
 import { classNames } from '../../../../utils';
 
 export interface NavItemProps {
-  current: boolean;
-  href: string;
   icon: (props: React.ComponentProps<'svg'>) => JSX.Element;
-  name: string;
+  label: string;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
+  to: string;
 }
 
-export const NavItem: React.FC<NavItemProps> = props => {
-  const { current, href, icon: Icon, name } = props;
+export const NavItem: React.FC<NavItemProps> = ({
+  icon: Icon,
+  label,
+  onClick,
+  to,
+}) => {
+  const location = useLocation();
+  const isCurrent = location.pathname.split('/')[1] === to.split('/')[1];
 
   return (
-    <a
+    <Link
       className={classNames(
-        current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-        'group flex items-center px-2 py-2 text-base font-medium rounded-md'
+        isCurrent ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+        'group flex items-center px-2 py-2 text-base font-medium rounded-md',
       )}
-      key={name}
-      href={href}
+      onClick={onClick}
+      to={to}
     >
       <Icon
         aria-hidden="true"
         className={classNames(
-          current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+          isCurrent ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
           'mr-4 flex-shrink-0 h-6 w-6'
         )}
       />
-      {name}
-    </a>
+      {label}
+    </Link>
   );
 };

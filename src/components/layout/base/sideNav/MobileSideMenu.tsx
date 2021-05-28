@@ -1,13 +1,9 @@
 // Lib
 import { Dialog, Transition } from '@headlessui/react';
-import {
-  CalendarIcon,
-  ClipboardListIcon,
-  CollectionIcon,
-  XIcon,
-} from '@heroicons/react/outline';
+import { XIcon } from '@heroicons/react/outline';
 import React, { Fragment, MouseEventHandler } from 'react';
 // App
+import { NAV_ITEMS } from './index';
 import { NavItem } from './NavItem';
 
 interface MobileSideMenuProps {
@@ -75,24 +71,13 @@ export const MobileSideMenu: React.FC<MobileSideMenuProps> = props => {
             </div>
             <div className="mt-5 flex-1 h-0 overflow-y-auto">
               <nav className="px-2 space-y-1">
-                <NavItem
-                  current={true}
-                  href="#"
-                  icon={CalendarIcon}
-                  name="Planner"
-                />
-                <NavItem
-                  current={false}
-                  href="#"
-                  icon={CollectionIcon}
-                  name="Recipes"
-                />
-                <NavItem
-                  current={false}
-                  href="#"
-                  icon={ClipboardListIcon}
-                  name="Ingredients"
-                />
+                {NAV_ITEMS.map(navItemProps => (
+                  <NavItem
+                    key={navItemProps.to}
+                    onClick={onClose}
+                    {...navItemProps}
+                  />
+                ))}
               </nav>
             </div>
           </div>
