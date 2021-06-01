@@ -25,25 +25,25 @@ const App: React.FC = () => {
 
   return (
     <Router>
-        <Switch>
-          <ProtectedRoute path="/planner">
-            <PlannerPage />
-          </ProtectedRoute>
-          <ProtectedRoute path="/recipes">
-            <RecipesPage />
-          </ProtectedRoute>
-          <ProtectedRoute path="/ingredients">
-            <IngredientsPage />
-          </ProtectedRoute>
-          <Route path="*">
-            {isAuthenticated
-              ?
-                <Redirect to="/planner" />
-              :
-                <AuthPage />
-            }
-          </Route>
-        </Switch>
+      <Switch>
+        <ProtectedRoute path="/planner">
+          <PlannerPage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/recipes">
+          <RecipesPage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/ingredients">
+          <IngredientsPage />
+        </ProtectedRoute>
+        <Route path="*">
+          {isAuthenticated
+            ?
+              <Redirect to="/planner" />
+            :
+              <AuthPage />
+          }
+        </Route>
+      </Switch>
     </Router>
   );
 };

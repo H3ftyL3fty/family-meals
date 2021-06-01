@@ -1,24 +1,31 @@
 // Lib
+import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import useSWR from 'swr';
 // App
 import { BaseLayout, PageLayout } from '../components';
 import { Ingredient } from '../entities';
 
 export const IngredientsPage: React.FC = () => {
-  const [ingredients, setIngredients] = useState<Ingredient[]>();
-  const [hasLoaded, setHasLoaded] = useState(false);
+  const { getAccessTokenSilently } = useAuth0();
 
-  useEffect(() => {
-    const fetchIngredients = async () => {
-      const response = await axios.get<Ingredient[]>(`${process.env.REACT_APP_API_URL}/ingredients`);
-      setIngredients(response.data);
-      setHasLoaded(true);
-    };
+  const dataFetcher = async (path: string): Promise<Ingredient[]> => {
+    const token = await getAccessTokenSilently({ audience: process.env.REACT_APP_AUTH0_AUDIENCE });
+    const response = await axios.get<Ingredient[]>(`${process.env.REACT_APP_API_URL}/${path}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    if (!hasLoaded)
-    fetchIngredients();
-  }, [hasLoaded, ingredients]);
+    return response.data;
+  };
+
+  const { data: ingredients, error } = useSWR('ingredients', dataFetcher);
+
+  if (error) {
+    console.log(error);
+  }
 
   return (
     <BaseLayout>
